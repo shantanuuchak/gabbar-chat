@@ -1,9 +1,10 @@
+
 // src/app/actions.ts
 "use server";
 
 import { summarizeText, type SummarizeTextInput } from '@/ai/flows/summarize-text';
 import { generateHeadline, type GenerateHeadlineInput } from '@/ai/flows/generate-headline';
-import { conversationalAiChat, type ChatInput } from '@/ai/flows/chat-flow'; // New import
+import { conversationalAiChat, type ChatInput } from '@/ai/flows/chat-flow';
 import {z} from 'genkit';
 
 export interface AiActionResult {
@@ -49,21 +50,22 @@ const ChatHistoryMessageSchemaFrontend = z.object({
   avatarUrl: z.string().optional(),
 });
 
-// New action for chat interaction
+// Action for chat interaction, now with optional image data
 export async function handleChatInteraction(formData: FormData): Promise<AiActionResult> {
   try {
     const userInput = formData.get('userInput') as string;
     const historyString = formData.get('history') as string | null;
+    const imageDataUri = formData.get('imageDataUri') as string | null;
 
-    if (!userInput || userInput.trim() === "") {
-      return { output: null, error: 'Message cannot be empty.' };
+    // User input can be empty if an image is provided
+    if ((!userInput || userInput.trim() === "") && !imageDataUri) {
+      return { output: null, error: 'Message or image cannot be empty.' };
     }
 
     let historyForAI: ChatInput['history'] = [];
     if (historyString) {
       try {
         const parsedHistory = JSON.parse(historyString);
-        // Validate and transform history
         const validatedHistory = z.array(ChatHistoryMessageSchemaFrontend).safeParse(parsedHistory);
         if (validatedHistory.success) {
           historyForAI = validatedHistory.data.map(msg => ({
@@ -75,12 +77,16 @@ export async function handleChatInteraction(formData: FormData): Promise<AiActio
         }
       } catch (e) {
         console.error("Error parsing chat history:", e);
-        // Proceed without history if parsing fails
       }
     }
     
 
-    const input: ChatInput = { userInput, history: historyForAI };
+    const input: ChatInput = { 
+      userInput: userInput || "", // Send empty string if only image is present
+      history: historyForAI,
+      imageDataUri: imageDataUri || undefined, // Pass undefined if null
+    };
+    
     const result = await conversationalAiChat(input);
     return { output: result.response, error: null };
 
@@ -89,3 +95,4 @@ export async function handleChatInteraction(formData: FormData): Promise<AiActio
     return { output: null, error: e.message || 'Failed to get AI response. Please try again.' };
   }
 }
+

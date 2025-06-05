@@ -233,7 +233,7 @@ export default function ChatPage() {
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Message Copilot..."
+            placeholder="Ask Gabbar..."
             className="w-full resize-none border-0 bg-transparent focus:ring-0 focus-visible:ring-0 p-2 pr-20 min-h-[40px] max-h-[200px] text-base"
             rows={1}
           />

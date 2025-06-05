@@ -62,7 +62,7 @@ const chatPrompt = ai.definePrompt({
       fullPrompt += `\n[The user has also provided an image from their camera. Analyze the image and incorporate your observations into the response to the user's text. If the user's text doesn't seem to relate to the image, briefly describe the image and then address the text query.]\n{{media url=imageDataUri}}`;
     }
     
-    fullPrompt += `\n\nAI Response:`;
+    // Removed "AI Response:" line to let Genkit handle output formatting based on ChatOutputSchema
     return fullPrompt;
   },
   config: {
@@ -92,8 +92,12 @@ const chatGenkitFlow = ai.defineFlow(
     const llmResponse = await chatPrompt(input); // input here contains userInput, history, and potentially imageDataUri
     const outputText = llmResponse.output?.response;
 
+    if (!outputText && llmResponse.output === null) { // More specific check for parsing failure
+      console.error("AI response parsing failed. LLM output might not conform to schema. Raw LLM Response:", llmResponse);
+      return { response: "I'm sorry, I had trouble understanding the AI's response format. Please try again." };
+    }
     if (!outputText) {
-      console.error("AI did not return a valid response object:", llmResponse);
+      console.error("AI did not return a valid response object or text:", llmResponse);
       return { response: "I'm sorry, I couldn't generate a response at this time." };
     }
     

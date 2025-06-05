@@ -40,6 +40,7 @@ const chatPrompt = ai.definePrompt({
   name: 'chatPrompt',
   input: { schema: ChatInputSchema },
   output: { schema: ChatOutputSchema },
+  model: 'googleai/gemini-2.0-flash', // Moved model here - this model supports multimodal input
   prompt: (input) => {
     // This function constructs the prompt string that will be processed by Handlebars.
     // Handlebars syntax like {{{userInput}}} and {{media url=imageDataUri}} will be resolved
@@ -62,11 +63,10 @@ const chatPrompt = ai.definePrompt({
       fullPrompt += `\n[The user has also provided an image from their camera. Analyze the image and incorporate your observations into the response to the user's text. If the user's text doesn't seem to relate to the image, briefly describe the image and then address the text query.]\n{{media url=imageDataUri}}`;
     }
     
-    // Removed "AI Response:" line to let Genkit handle output formatting based on ChatOutputSchema
     return fullPrompt;
   },
   config: {
-    model: 'googleai/gemini-2.0-flash', // This model supports multimodal input
+    // model removed from here
     safetySettings: [
       {
         category: 'HARM_CATEGORY_HATE_SPEECH',

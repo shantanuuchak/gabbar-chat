@@ -8,7 +8,7 @@ export function Header() {
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
           <Bot className="h-6 w-6 text-primary" />
-          <span className="font-bold font-headline text-foreground">AI Chat</span>
+          <span className="font-bold font-headline text-foreground">Gabbar</span>
         </Link>
         {/* Placeholder for future icons like settings or help */}
         {/* <Button variant="ghost" size="icon">

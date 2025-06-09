@@ -5,8 +5,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'AI Chat',
-  description: 'Your AI chat assistant.',
+  title: 'Gabbar',
+  description: 'Ultimate AI Assistant.',
 };
 
 export default function RootLayout({

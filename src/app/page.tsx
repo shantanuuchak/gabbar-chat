@@ -330,7 +330,7 @@ export default function ChatPage() {
           <AlertDialogFooter>
             <AlertDialogCancel>Maybe Later</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <Link href="https://gabbar.me/dashboard" target="_blank" rel="noopener noreferrer">
+              <Link href="https://gabbar.me/login" target="_blank" rel="noopener noreferrer">
                 Go to Gabbar Full Version
               </Link>
             </AlertDialogAction>

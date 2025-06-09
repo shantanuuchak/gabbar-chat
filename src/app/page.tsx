@@ -214,7 +214,7 @@ export default function ChatPage() {
     <div className="flex flex-col h-full w-full max-w-3xl mx-auto">
       {messages.length === 0 && !isCameraOpen && (
         <div className="text-center my-auto">
-          <h1 className="text-4xl font-semibold text-foreground/90 mb-8">
+          <h1 className="text-4xl font-semibold text-foreground mb-8">
             Hey, what&apos;s on your mind today?
           </h1>
         </div>
@@ -256,7 +256,7 @@ export default function ChatPage() {
 
 
       <form onSubmit={handleSubmit} className="mt-auto sticky bottom-0 pb-4 bg-background">
-        <div className="relative flex flex-col gap-2 rounded-xl border border-border bg-card p-3 shadow-lg">
+        <div className="relative flex flex-col gap-2 rounded-xl border border-input bg-card p-3 shadow-lg hover:shadow-xl transition-all duration-200 focus-within:shadow-2xl focus-within:ring-2 focus-within:ring-ring">
           <Textarea
             ref={inputRef}
             value={inputValue}
@@ -271,7 +271,7 @@ export default function ChatPage() {
             <div className="flex items-center gap-1">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-sm text-foreground/80 hover:bg-muted" disabled={userMessagesSentCount >= 5}>
+                  <Button variant="ghost" size="sm" className="text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors" disabled={userMessagesSentCount >= 5}>
                     <Sparkles className="w-4 h-4 mr-2 text-accent" />
                     Quick response
                     <ChevronDown className="w-4 h-4 ml-1" />
@@ -285,7 +285,10 @@ export default function ChatPage() {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className={cn("text-foreground/60 hover:text-foreground", isCameraOpen && videoStream && "text-primary bg-primary/10")}
+                className={cn(
+                  "text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors", 
+                  isCameraOpen && videoStream && "text-primary bg-primary/10 hover:bg-primary/20"
+                )}
                 onClick={toggleCamera}
                 type="button"
                 title={isCameraOpen ? "Turn off camera" : "Turn on camera"}
@@ -294,7 +297,7 @@ export default function ChatPage() {
                 {isCameraOpen ? <Video className="w-5 h-5" /> : <Camera className="w-5 h-5" />}
                 <span className="sr-only">{isCameraOpen ? "Turn off camera & video input" : "Turn on camera for video input"}</span>
               </Button>
-              <Button variant="ghost" size="icon" className="text-foreground/60 hover:text-foreground" title="Use microphone (disabled)" disabled={userMessagesSentCount >= 5}>
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors" title="Use microphone (disabled)" disabled={userMessagesSentCount >= 5}>
                 <Mic className="w-5 h-5" />
                 <span className="sr-only">Use microphone</span>
               </Button>
@@ -302,11 +305,11 @@ export default function ChatPage() {
             <Button 
               type="submit" 
               size="icon" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg w-9 h-9"
+              className="bg-primary hover:bg-primary/80 active:bg-primary/70 active:scale-95 text-primary-foreground rounded-lg w-9 h-9 transition-all duration-150 ease-in-out disabled:opacity-50 disabled:saturate-50"
               disabled={isPending || (!inputValue.trim() && (!isCameraOpen || !videoStream)) || userMessagesSentCount >= 5}
               title="Send message"
             >
-              {isPending ? <Sparkles className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+              {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
               <span className="sr-only">Send</span>
             </Button>
           </div>
